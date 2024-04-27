@@ -1,16 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const Home = () => {
-    return (
-        <div>
-            <ul>
-                <h2>Welcome to Phonebook!</h2>
-                <li><Link to="/register">Register</Link></li>
-                <li><Link to="/login">Login</Link></li>
-            </ul>
-        </div>
-    )
-}
+const HomePage = () => {
+  const navigate = useNavigate();
 
-export default Home;
+  const handleClick = () => {
+    navigate('/contacts');
+  };
+
+  return (
+    <div>
+      <h1>Welcome to the Phonebook App!</h1>
+      <p>Please log in or register to start using the app.</p>
+      <button onClick={handleClick}>Go to Contacts</button>
+    </div>
+  );
+};
+
+export default HomePage;

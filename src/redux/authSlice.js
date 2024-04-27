@@ -1,130 +1,70 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://goit-task-manager.herokuapp.com/';
+const apiUrl = 'https://connections-api.herokuapp.com';
 
-const initialState = {
-  user: { name: null, email: null },
-  token: null,
-  isLoggedIn: false,
-  isRefreshing: false,
-};
-
-const setAuthHeader = token => {
-  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-};
-
-const clearAuthHeader = () => {
-  axios.defaults.headers.common.Authorization = '';
-};
-
-export const register = createAsyncThunk(
+export const registerUser = createAsyncThunk(
   'auth/register',
-  async (credentials, thunkAPI) => {
-    try {
-      const res = await axios.post('/users/signup', credentials);
-      setAuthHeader(res.data.token);
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+  async ({ name, email, password }) => {
+    console.log({ name, email, password });
+    const response = await axios.post(`${apiUrl}/users/signup`, { name, email, password });
+    return response.data;
   }
 );
 
-export const logIn = createAsyncThunk(
+export const loginUser = createAsyncThunk(
   'auth/login',
-  async (credentials, thunkAPI) => {
-    try {
-      const res = await axios.post('/users/login', credentials);
-      setAuthHeader(res.data.token);
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+  async ({ email, password }) => {
+    const response = await axios.post(`${apiUrl}/users/login`, { email, password });
+    return response.data;
   }
 );
 
-export const logOut = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
-  try {
-    await axios.post('/users/logout');
-    clearAuthHeader();
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
-  }
-});
-
-export const refreshUser = createAsyncThunk(
-  'auth/refresh',
-  async (_, thunkAPI) => {
-    const state = thunkAPI.getState();
-    const persistedToken = state.auth.token;
-
-    if (persistedToken === null) {
-      return thunkAPI.rejectWithValue('Unable to fetch user');
-    }
-
-    try {
-      setAuthHeader(persistedToken);
-      const res = await axios.get('/users/me');
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+export const logoutUser = createAsyncThunk(
+  'auth/logout',
+  async () => {
+    const response = await axios.post(`${apiUrl}/users/logout`);
+    return response.data;
   }
 );
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState,
-  extraReducers: builder => {
+  initialState: {
+    token: null,
+    user: null,
+    isLoggedIn: false,
+  },
+  reducers: {
+    setToken: (state, action) => {
+      state.token = action.payload;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+    setIsLoggedIn: (state, action) => {
+      state.isLoggedIn = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
     builder
-      .addCase(register.fulfilled, (state, action) => {
-        return {
-          ...state,
-          user: action.payload.user,
-          token: action.payload.token,
-          isLoggedIn: true,
-        };
+     .addCase(registerUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.isLoggedIn = true;
       })
-      .addCase(logIn.fulfilled, (state, action) => {
-        return {
-          ...state,
-          user: action.payload.user,
-          token: action.payload.token,
-          isLoggedIn: true,
-        };
+     .addCase(loginUser.fulfilled, (state, action) => {
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.isLoggedIn = true;
       })
-      .addCase(logOut.fulfilled, state => {
-        return {
-          ...state,
-          user: { name: null, email: null },
-          token: null,
-          isLoggedIn: false,
-        };
-      })
-      .addCase(refreshUser.pending, state => {
-        return {
-          ...state,
-          isRefreshing: true,
-        };
-      })
-      .addCase(refreshUser.fulfilled, (state, action) => {
-        return {
-          ...state,
-          user: action.payload,
-          isLoggedIn: true,
-          isRefreshing: false,
-        };
-      })
-      .addCase(refreshUser.rejected, state => {
-        return {
-          ...state,
-          isRefreshing: false,
-        };
+     .addCase(logoutUser.fulfilled, (state) => {
+        state.token = null;
+        state.user = null;
+        state.isLoggedIn = false;
       });
   },
 });
 
-
+export const { setToken, setUser, setIsLoggedIn } = authSlice.actions;
 export const authReducer = authSlice.reducer;

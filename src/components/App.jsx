@@ -1,50 +1,25 @@
-import React, { lazy, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import Loader from './Loader';
-import { useDispatch } from 'react-redux';
-import { refreshUser } from '../redux/authSlice';
-import { useAuth } from '../redux/useAuth';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import {store} from '../redux/store';
+import Navigation from '../components/Navigation/Navigation';
+import HomePage from '../components/Home/Home';
+import RegisterPage from '../components/RegisterPage/RegisterPage';
+import LoginPage from '../components/LoginPage/LoginPage';
+import ContactsPage from '../components/ContactPage/ContactPage';
 
-// Імпортуємо компоненти з використанням lazy
-const Home = lazy(() => import('./Home/Home'));
-const ContactPage = lazy(() => import('./ContactPage/ContactPage'));
-const Register = lazy(() => import('./Register/Register'));
-const Login = lazy(() => import('./Login/Login'));
-const Layout = lazy(() => import('./Layout'));
-const RestrictedRoute = lazy(() => import('./RestrictedRoute'));
-const PrivateRoute = lazy(() => import('./PrivateRoute'));
-
-const App = () => {
-  const dispatch = useDispatch();
-  const { isRefreshing } = useAuth();
-
-  useEffect(() => {
-    dispatch(refreshUser());
-  }, [dispatch]);
-
-  if (isRefreshing === undefined) {
-    return <Loader />;
-  }
-
+export const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route
-          path="/register"
-          element={<RestrictedRoute redirectTo="/contacts" component={Register} />}
-        />
-        <Route
-          path="/login"
-          element={<RestrictedRoute redirectTo="/contacts" component={Login} />}
-        />
-        <Route
-          path="/contacts"
-          element={<PrivateRoute redirectTo="/login" component={ContactPage} />}
-        />
-      </Route>
-    </Routes>
+    <Provider store={store}>
+      <Router>
+        <Navigation />
+        <Routes>
+          <Route path="/" exact element={<HomePage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/contacts" element={<ContactsPage />} />
+        </Routes>
+      </Router>
+    </Provider>
   );
 };
-
-export { App };
