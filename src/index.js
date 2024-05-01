@@ -5,7 +5,7 @@ import { store } from './redux/store';
 import { App } from './components/App';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter basename="/got-react-hw-08-phonebook">
+  <BrowserRouter basename="/goit-react-hw-08-phonebook">
     <Provider store={store}>
       <App />
     </Provider>
