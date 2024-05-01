@@ -6,10 +6,15 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(loginUser({ email, password }));
+    try {
+      await dispatch(loginUser({ email, password }));
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -22,10 +27,11 @@ const LoginPage = () => {
         </label>
         <label>
           Password:
-          <input type="current-password" value={password} onChange={(event) => setPassword(event.target.value)} />
+          <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
         </label>
         <button type="submit">Login</button>
       </form>
+      {error && <p>Error: {error}</p>}
     </div>
   );
 };

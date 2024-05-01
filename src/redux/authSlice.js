@@ -6,7 +6,6 @@ const apiUrl = 'https://connections-api.herokuapp.com';
 export const registerUser = createAsyncThunk(
   'auth/register',
   async ({ name, email, password }) => {
-    console.log({ name, email, password });
     const response = await axios.post(`${apiUrl}/users/signup`, { name, email, password });
     return response.data;
   }
@@ -24,6 +23,14 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async () => {
     const response = await axios.post(`${apiUrl}/users/logout`);
+    return response.data;
+  }
+);
+
+export const getCurrentUser = createAsyncThunk(
+  'auth/getCurrentUser',
+  async () => {
+    const response = await axios.get(`${apiUrl}/users/current`);
     return response.data;
   }
 );
@@ -48,17 +55,17 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-     .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isLoggedIn = true;
       })
-     .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginUser.fulfilled, (state, action) => {
         state.token = action.payload.token;
         state.user = action.payload.user;
         state.isLoggedIn = true;
       })
-     .addCase(logoutUser.fulfilled, (state) => {
+      .addCase(logoutUser.fulfilled, (state) => {
         state.token = null;
         state.user = null;
         state.isLoggedIn = false;

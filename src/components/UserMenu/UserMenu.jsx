@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutUser } from '../../redux/authSlice';
+import { logoutUser, getCurrentUser } from '../../redux/authSlice';
 
 const UserMenu = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
 
   const handleLogout = async () => {
     dispatch(logoutUser());
