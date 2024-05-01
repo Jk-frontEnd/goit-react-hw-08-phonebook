@@ -1,39 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getContacts } from '../../redux/select';
-import { fetchAllContacts } from '../../redux/operations';
+import React from 'react';
 import {ContactList} from '../ContactList/ContactList';
-import {ContactElem} from '../ContactElem/ContactElem'; 
+import { Form } from 'components/Form/Form';
+import { Search } from 'components/Search/Search';
+import css from './ContactPage.module.css';
 
 const ContactsPage = () => {
-  const [isAddingContact, setIsAddingContact] = useState(false);
-  const contacts = useSelector(getContacts);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchAllContacts());
-  }, [dispatch]);
-
-  const handleAddContactClick = () => {
-    setIsAddingContact(true);
-  };
-
-  const handleCloseForm = () => {
-    setIsAddingContact(false);
-  };
-
-  return (
+return (
     <div>
       <h1>Contacts</h1>
-      {isAddingContact ? (
-        <ContactElem onClose={handleCloseForm} />
-      ) : (
-        <>
-          <button onClick={handleAddContactClick}>Add Contact</button>
-          {contacts.length > 0 && <ContactList />}
-          {contacts.length === 0 && <p>No contacts found.</p>}
-        </>
-      )}
+      <div className={css.box}>
+        <Form />
+        <Search />
+      </div>
+      <ContactList />
     </div>
   );
 };

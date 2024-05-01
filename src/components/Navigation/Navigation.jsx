@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import Logout from '../Logout/Logout';
+import UserMenu from '../UserMenu/UserMenu';
 import css from './Navigation.module.css';
 
 const Navigation = () => {
@@ -29,7 +29,7 @@ const Navigation = () => {
               <NavLink to="/contacts">Contacts</NavLink>
             </li>
             <li>
-              <Logout />
+              <UserMenu />
             </li>
           </>
         )}

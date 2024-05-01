@@ -20,7 +20,6 @@ const ContactList = () => {
 
   return (
     <div className={css.contBox}>
-      <h2 className={css.header}>Contacts</h2>
       {contacts.length > 0 ? (
         <ul>
         {filteredContacts.map(({ id, name, number }) => (
