@@ -33,7 +33,7 @@ const authSlice = createSlice({
   initialState: {
     token: null,
     user: null,
-    isLoggedIn: true,
+    isLoggedIn: false,
   },
   reducers: {
     setToken: (state, action) => {
