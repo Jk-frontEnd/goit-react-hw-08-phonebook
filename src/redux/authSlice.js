@@ -5,8 +5,8 @@ const apiUrl = 'https://connections-api.herokuapp.com';
 
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async ({ name, email, password }) => {
-    const response = await axios.post(`${apiUrl}/users/signup`, { name, email, password });
+  async () => {
+    const response = await axios.post(`${apiUrl}/users/signup`, {});    
     return response.data;
   }
 );
