@@ -3,7 +3,7 @@ import css from './ContactList.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchContacts, selectAllContacts } from '../../redux/contactSlice';
 import { ContactElem } from '../ContactElem/ContactElem';
-import { getFilter } from '../../redux/select'; 
+import { getFilter } from '../../redux/select';
 
 const ContactList = () => {
   const dispatch = useDispatch();
@@ -14,22 +14,21 @@ const ContactList = () => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  const filteredContacts = contacts.filter(contact =>
+  const filteredContacts = contacts.filter((contact) =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
     <div className={css.contBox}>
-      {contacts.length > 0 ? (
+      {filteredContacts.length > 0 ? (
         <ul>
-        {filteredContacts.map(({ id, name, number }) => (
-          <ContactElem key={id} contact={{ id, name, number }} />
-        ))}
-      </ul>
+          {filteredContacts.map(({ id, name, number }) => (
+            <ContactElem key={id} contact={{ id, name, number }} />
+          ))}
+        </ul>
       ) : (
-      <p>You have no contacts saved yet. Add some to view contact list.</p>
+        <p>You have no contacts saved yet. Add some to view contact list.</p>
       )}
-      
     </div>
   );
 };

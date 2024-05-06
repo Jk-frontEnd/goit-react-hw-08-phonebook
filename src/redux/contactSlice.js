@@ -1,38 +1,65 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const baseUrl = 'https://6604579b2ca9478ea17dd2fa.mockapi.io/contacts';
-const authBaseUrl = 'https://connections-api.herokuapp.com/api';
+const baseUrl = 'https://connections-api.herokuapp.com/';
 
-export const signup = createAsyncThunk(
-  'auth/signup',
-  async (userData) => {
-    const response = await axios.post(`${authBaseUrl}/users/signup`, userData);
-    return response.data;
-  }
-);
+const getToken = (getState) => getState().auth.token;
+
+const setHeaders = (token) => ({
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
 
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchAll',
-  async () => {
-    const response = await axios.get(baseUrl);
-    return response.data;
+  async (_, { getState }) => {
+    const token = getToken(getState());
+    try {
+      const response = await axios.get(baseUrl, setHeaders(token));
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 
 export const addContact = createAsyncThunk(
   'contacts/addContact',
-  async ({ name, number }) => {
-    const response = await axios.post(baseUrl, { name, number });
-    return response.data;
+  async ({ name, number }, { getState }) => {
+    const token = getToken(getState());
+    try {
+      const response = await axios.post(baseUrl, { name, number }, setHeaders(token));
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
-  async (contactId) => {
-    await axios.delete(`${baseUrl}/${contactId}`);
-    return contactId;
+  async (contactId, { getState }) => {
+    const token = getToken(getState());
+    try {
+      await axios.delete(`${baseUrl}/${contactId}`, setHeaders(token));
+      return contactId;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const updateContact = createAsyncThunk(
+  'contacts/updateContact',
+  async ({ contactId, updatedData }, { getState }) => {
+    const token = getToken(getState());
+    try {
+      const response = await axios.patch(`${baseUrl}/${contactId}`, updatedData, setHeaders(token));
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 
@@ -42,18 +69,10 @@ const contactsSlice = createSlice({
     items: [],
     isLoading: false,
     error: null,
-    auth: {
-      isLoggedIn: false,
-      user: null,
-    },
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(signup.fulfilled, (state, action) => {
-        state.auth.isLoggedIn = true;
-        state.auth.user = action.payload;
-      })
       .addCase(fetchContacts.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -71,6 +90,12 @@ const contactsSlice = createSlice({
       })
       .addCase(deleteContact.fulfilled, (state, action) => {
         state.items = state.items.filter(contact => contact.id !== action.payload);
+      })
+      .addCase(updateContact.fulfilled, (state, action) => {
+        const index = state.items.findIndex(contact => contact.id === action.payload.id);
+        if (index !== -1) {
+          state.items[index] = action.payload;
+        }
       });
   },
 });
@@ -78,6 +103,5 @@ const contactsSlice = createSlice({
 export const selectAllContacts = (state) => state.contacts.items;
 export const selectContactsLoading = (state) => state.contacts.isLoading;
 export const selectContactsError = (state) => state.contacts.error;
-export const selectAuth = (state) => state.contacts.auth;
 
 export const contactsReducer = contactsSlice.reducer;
