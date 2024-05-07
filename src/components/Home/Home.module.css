@@ -1,0 +1,28 @@
+:root {
+    /*color*/
+    --red-primary: #DD473E;
+    --black-primary: #213257;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--black-primary);
+}
+
+.icon {
+    width: 70px;
+    height: 70px;
+    margin: 0;
+    padding: 0;
+    margin-top: 70px;
+    margin-bottom: 24px;
+    fill: var(--red-primary);
+}
+
+.h1 {
+    margin: 0;
+    padding: 0;
+}

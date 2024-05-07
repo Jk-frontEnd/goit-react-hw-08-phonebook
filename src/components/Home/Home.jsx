@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as Icon } from '../../img/telebudy-icon.svg';
+import css from './Home.module.css'
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -19,16 +21,20 @@ const HomePage = () => {
   };
 
   return (
-    <div>
-      <h1>Welcome to the Phonebook App!</h1>
-      <p>Please log in or register to start using the app.</p>
+    <div className={css.container}>
+      <Icon className={css.icon} />
+      <h1 className={css.h1}>Tele Buddy</h1>
+      <p className={css.slogan}>Stay in touch.</p>
       {!isLoggedIn ? (
-        <div>
-          <button onClick={handleClickReg}>Register</button> 
-          <button onClick={handleClickLogIn}>Login</button>
+        <>
+          <p className={css.logInP}>Please log in or register to start using the app.</p>
+          <div className={css.btnBox}>
+          <button className={css.btn} onClick={handleClickReg}>Register</button> 
+          <button className={css.btn}  onClick={handleClickLogIn}>Login</button>
         </div>
+          </>
       ) : (
-        <button onClick={handleClickLogged}>Go to Contacts</button>
+        <button className={css.btn} onClick={handleClickLogged}>Go to Contacts</button>
       )}
     </div>
   );
