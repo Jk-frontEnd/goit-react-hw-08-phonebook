@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../redux/authSlice';
 import css from './LoginPage.module.css';
@@ -18,21 +19,17 @@ const LoginPage = () => {
     }
   };
 
+  console.log(error);
+
   return (
-    <div>
-      <h1>Login</h1>
+    <div className={css.loginPage} >
+      <h1 className={css.h1} >Log In</h1>
       <form className={css.form} onSubmit={handleSubmit}>
-        <label>
-          Email:
-          <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
-        </label>
-        <label>
-          Password:
-          <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
-        </label>
-        <button type="submit">Login</button>
+          <input className={css.input} placeholder="Email"  type="email" value={email} onChange={(event) => setEmail(event.target.value)} required/>
+          <input className={css.input} placeholder="Password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} required/>
+        <button className={css.btn}  type="submit">Login</button>
       </form>
-      {error && <p>Error: {error}</p>}
+      <p className={css.opportunity}>Don't have an account?  <Link className={css.link} to="/register">Register</Link></p>
     </div>
   );
 };

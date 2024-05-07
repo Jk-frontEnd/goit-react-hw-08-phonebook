@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../redux/authSlice';
+import { Link } from 'react-router-dom';
+import css from './RegisterPage.module.css'
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -15,22 +17,14 @@ const RegisterPage = () => {
 
   return (
     <div>
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input type="text" value={name} onChange={(event) => setName(event.target.value)} />
-        </label>
-        <label>
-          Email:
-          <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
-        </label>
-        <label>
-          Password:
-          <input type="current-password" value={password} onChange={(event) => setPassword(event.target.value)} />
-        </label>
-        <button type="submit">Register</button>
+      <h1 className={css.h1}>Register</h1>
+      <form className={css.form}  onSubmit={handleSubmit}>
+          <input className={css.input} placeholder='Name' type="text" value={name} onChange={(event) => setName(event.target.value)} />
+          <input className={css.input} placeholder='Email' type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+          <input className={css.input} placeholder='Password' type="current-password" value={password} onChange={(event) => setPassword(event.target.value)} />
+        <button className={css.btn}   type="submit">Register</button>
       </form>
+      <p className={css.opportunity}>Don't have an account?  <Link className={css.link} to="/register">Register</Link></p>
     </div>
   );
 };

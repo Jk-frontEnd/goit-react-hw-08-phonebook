@@ -7,7 +7,7 @@ import css from './ContactPage.module.css';
 const ContactsPage = () => {
 return (
     <div>
-      <h1>Contacts</h1>
+      <h1 className={css.h1}>Contacts</h1>
       <div className={css.box}>
         <Form />
         <Search />

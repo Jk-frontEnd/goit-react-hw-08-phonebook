@@ -27,12 +27,13 @@ export const fetchContacts = createAsyncThunk(
 export const addContact = createAsyncThunk(
   'contacts/addContact',
   async ({ name, number }, { getState }) => {
-    const token = getToken(getState());
     try {
+      const token = getToken(getState());
       const response = await axios.post(baseUrl, { name, number }, setHeaders(token));
       return response.data;
     } catch (error) {
       throw error;
+      console.log(error)
     }
   }
 );
