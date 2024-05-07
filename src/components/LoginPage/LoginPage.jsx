@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../redux/authSlice';
+import css from './LoginPage.module.css';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const LoginPage = () => {
   return (
     <div>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
+      <form className={css.form} onSubmit={handleSubmit}>
         <label>
           Email:
           <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} />

@@ -9,31 +9,19 @@ const Navigation = () => {
 
   return (
     <nav className={css.nav}>
-      <ul className={css.navList}>
-        <li>
-          <NavLink to="/" exact>Home</NavLink>
-        </li>
+          <NavLink className={css.link} to="/" exact>Home</NavLink>
         {!isLoggedIn && (
-          <>
-            <li>
-              <NavLink to="/register">Register</NavLink>
-            </li>
-            <li>
-              <NavLink to="/login">Login</NavLink>
-            </li>
-          </>
+          <div className={css.leftBox}>
+            <NavLink className={css.link} to="/register">Register</NavLink>
+            <NavLink className={css.link} to="/login">Login</NavLink>
+          </div>
         )}
         {isLoggedIn && (
-          <>
-            <li>
-              <NavLink to="/contacts">Contacts</NavLink>
-            </li>
-            <li>
-              <UserMenu />
-            </li>
-          </>
+         <div  className={css.leftBox}>
+            <NavLink className={css.link} to="/contacts">Contacts</NavLink>
+            <UserMenu />
+        </div>
         )}
-      </ul>
     </nav>
   );
 };

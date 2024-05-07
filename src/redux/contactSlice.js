@@ -40,12 +40,13 @@ export const addContact = createAsyncThunk(
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
   async (contactId, { getState }) => {
-    const token = getToken(getState());
     try {
+      const token = getToken(getState());
       await axios.delete(`${baseUrl}/${contactId}`, setHeaders(token));
       return contactId;
     } catch (error) {
       throw error;
+      console.log(error);
     }
   }
 );
