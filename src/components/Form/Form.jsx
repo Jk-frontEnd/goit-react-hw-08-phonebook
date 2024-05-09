@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import css from './Form.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/contactSlice';
-import { ReactComponent as Icon1 } from '../../img/user.svg';
-import { ReactComponent as Icon2 } from '../../img/telebudy-icon.svg';
-
-
 
 const Form = () => {
   const dispatch = useDispatch();
