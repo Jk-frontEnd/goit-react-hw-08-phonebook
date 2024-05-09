@@ -21,13 +21,16 @@ const ContactList = () => {
   return (
     <div className={css.contBox}>
       {filteredContacts.length > 0 ? (
-        <ul>
-          {filteredContacts.map(({ id, name, number }) => (
-            <ContactElem key={id} contact={{ id, name, number }} />
-          ))}
-        </ul>
+        <div>
+          <h2 className={css.heading}>Your contacts</h2>
+          <ul className={css.list}>
+            {filteredContacts.map(({ id, name, number }) => (
+              <ContactElem key={id} contact={{ id, name, number }} />
+            ))}
+          </ul>
+        </div>
       ) : (
-        <p>You have no contacts saved yet. Add some to view contact list.</p>
+        <p className={css.none}>You have no contacts saved yet. Add some to view contact list.</p>
       )}
     </div>
   );

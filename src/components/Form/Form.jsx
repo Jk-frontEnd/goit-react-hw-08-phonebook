@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import css from './Form.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/contactSlice';
-import { FormControl } from '@mui/material';
+import { ReactComponent as Icon1 } from '../../img/user.svg';
+import { ReactComponent as Icon2 } from '../../img/telebudy-icon.svg';
+
 
 
 const Form = () => {
@@ -58,13 +60,11 @@ const Form = () => {
 
   return (
     <form className={css.formBox} onSubmit={handleSubmit}>
-      <label>
-        Name
-        <input type="text" name="name" value={name} onChange={handleNameChange} required />
+      <label className={css.label1} >
+        <input className={css.input} placeholder='Name' type="text" name="name" value={name} onChange={handleNameChange} required />
       </label>
-      <label>
-        Phone number
-        <input type="tel" name="number" value={number} onChange={handleNumberChange} required />
+      <label className={css.label2}>
+        <input className={css.input} placeholder='Phone number'  type="tel" name="number" value={number} onChange={handleNumberChange} required />
       </label>
       {error && <div style={{ color: 'ed' }}>{error}</div>}
       <button className={css.btn} type="submit">
