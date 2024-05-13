@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import css from './ContactList.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchContacts, selectAllContacts } from '../../redux/contactSlice';
@@ -9,14 +9,18 @@ const ContactList = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(selectAllContacts);
   const filter = useSelector(getFilter);
+  const [filteredContacts, setFilteredContacts] = useState([]);
 
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  const filteredContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  useEffect(() => {
+    const filtered = contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+    setFilteredContacts(filtered);
+  }, [contacts, filter]);
 
   return (
     <div className={css.contBox}>

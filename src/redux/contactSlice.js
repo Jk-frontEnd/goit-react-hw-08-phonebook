@@ -40,13 +40,15 @@ export const addContact = createAsyncThunk(
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
   async ({ contactId }, thunkAPI) => {
+    if (!contactId) {
+      return { error: 'Contact ID is required' };
+    }
     try {
       const token = tokenSelector(thunkAPI.getState());
-      await axios.delete(`${baseUrl}/${contactId}`, setHeaders(token));
+      await axios.delete(`${baseUrl}contacts/${contactId}`, setHeaders(token));
       return contactId;
     } catch (error) {
-      console.log(error);
-      throw error;
+      return { error: 'Failed to delete contact', status: error.response.status };
     }
   }
 );
@@ -81,17 +83,17 @@ const contactsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-     .addCase(fetchContacts.pending, (state) => {
+      .addCase(fetchContacts.pending, (state) => {
         state.isLoading = true;
         state.loading.fetchContacts = true;
         state.error = null;
       })
-     .addCase(fetchContacts.fulfilled, (state, action) => {
+      .addCase(fetchContacts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.loading.fetchContacts = false;
         state.items = action.payload;
       })
-     .addCase(fetchContacts.rejected, (state, action) => {
+      .addCase(fetchContacts.rejected, (state, action) => {
         state.isLoading = false;
         state.loading.fetchContacts = false;
         state.error = action.error.message;
@@ -99,20 +101,17 @@ const contactsSlice = createSlice({
       .addCase(addContact.fulfilled, (state, action) => {
         state.items.push(action.payload);
       })
-     .addCase(deleteContact.fulfilled, (state, action) => {
-        state.items = state.items.filter((contact) => contact.id!== action.payload);
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.items = state.items.filter((contact) => contact.id !== action.payload);
       })
-     .addCase(updateContact.fulfilled, (state, action) => {
-        const index = state.items.findIndex((contact) => contact.id === action.payload.id);
-        if (index!== -1) {
-          state.items[index] = action.payload;
-        }
-      });  },
+      .addCase(deleteContact.rejected, (state, action) => {
+        state.error = action.error.message;
+      });
+  },
 });
 
 export const selectAllContacts = (state) => state.contacts.items;
-export const selectContactsLoading = (state) => state.contacts.isLoading;
-export const selectContactsError = (state) => state.contacts.error;
-export const selectContactsLoadingStatus = (state) => state.contacts.loading;
+export const selectLoading = (state) => state.contacts.isLoading;
+export const selectError = (state) => state.contacts.error;
 
 export const contactsReducer = contactsSlice.reducer;
