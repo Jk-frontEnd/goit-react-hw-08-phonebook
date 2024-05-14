@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import css from './ContactList.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchContacts, selectAllContacts } from '../../redux/contactSlice';
-import { selectFilter } from '../../redux/filterSlice';
 import { ContactElem } from '../ContactElem/ContactElem';
+import { getFilter } from '../../redux/select';
 
 const ContactList = () => {
-   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const contacts = useSelector(selectAllContacts);
-  const filter = useSelector(selectFilter);
+  const filter = useSelector(getFilter);
   const [filteredContacts, setFilteredContacts] = useState([]);
 
   useEffect(() => {
@@ -21,7 +21,6 @@ const ContactList = () => {
     );
     setFilteredContacts(filtered);
   }, [contacts, filter]);
-
 
   return (
     <div className={css.contBox}>
