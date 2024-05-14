@@ -40,14 +40,13 @@ export const addContact = createAsyncThunk(
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
   async ({ contactId }, thunkAPI) => {
-    if (!contactId) {
-      return { error: 'Contact ID is required' };
-    }
+    console.log('contactId:', contactId); // add this line
     try {
       const token = tokenSelector(thunkAPI.getState());
       await axios.delete(`${baseUrl}contacts/${contactId}`, setHeaders(token));
       return contactId;
     } catch (error) {
+      console.log(error)
       return { error: 'Failed to delete contact', status: error.response.status };
     }
   }
