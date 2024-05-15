@@ -1,21 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const baseUrl = 'https://connections-api.herokuapp.com/';
+const baseUrl = 'https://connections-api.herokuapp.com/contacts';
 const tokenSelector = (state) => state.auth.token;
-
-const setHeaders = (token) => ({
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
 
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchAll',
-  async (_, thunkAPI, { getState }) => {
+  async (_, thunkAPI) => {
     const token = tokenSelector(thunkAPI.getState());
     try {
-      const response = await axios.get(baseUrl, setHeaders(token));
+      const response = await axios.get(baseUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       throw error;
@@ -26,12 +24,15 @@ export const fetchContacts = createAsyncThunk(
 export const addContact = createAsyncThunk(
   'contacts/addContact',
   async ({ name, number }, thunkAPI) => {
+    const token = tokenSelector(thunkAPI.getState());
     try {
-      const token = tokenSelector(thunkAPI.getState());
-      const response = await axios.post(`${baseUrl}contacts`, { name, number }, setHeaders(token));
+      const response = await axios.post(baseUrl, { name, number }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
@@ -43,9 +44,13 @@ export const deleteContact = createAsyncThunk(
     if (!contactId) {
       return { error: 'Contact ID is required' };
     }
+    const token = tokenSelector(thunkAPI.getState());
     try {
-      const token = tokenSelector(thunkAPI.getState());
-      await axios.delete(`${baseUrl}contacts/${contactId}`, setHeaders(token));
+      await axios.delete(`${baseUrl}/${contactId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return contactId;
     } catch (error) {
       return { error: 'Failed to delete contact', status: error.response.status };
@@ -56,12 +61,15 @@ export const deleteContact = createAsyncThunk(
 export const updateContact = createAsyncThunk(
   'contacts/updateContact',
   async ({ contactId, updatedData }, thunkAPI) => {
+    const token = tokenSelector(thunkAPI.getState());
     try {
-      const token = tokenSelector(thunkAPI.getState());
-      const response = await axios.patch(`${baseUrl}/${contactId}`, updatedData, setHeaders(token));
+      const response = await axios.patch(`${baseUrl}/${contactId}`, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

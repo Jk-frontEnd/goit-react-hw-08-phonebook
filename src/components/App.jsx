@@ -6,6 +6,7 @@ import HomePage from '../components/Home/Home';
 import RegisterPage from '../components/RegisterPage/RegisterPage';
 import LoginPage from '../components/LoginPage/LoginPage';
 import ContactsPage from '../components/ContactPage/ContactPage';
+import PrivateRoute from './PrivateRoute/PrivateRoute';
 
 export const App = () => {
   return (
@@ -15,8 +16,17 @@ export const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/contacts" element={<ContactsPage />} />
+          <Route element={<PrivateRoute/>}>
+            <Route path="/contacts" element={<ContactsPage />} />
+          </Route>
         </Routes>
       </>
   );
 };
+
+
+// ! TODO:
+// * Раут з контактами має бути захищеним - тільки авторизований користувач повинен мати до нього доступ.
+// TODO: При перезавантаженні сторінки авторизований користувач має залишатись авторизованим.
+// TODO: Видалення контактів не працює.
+// TODO: Фетчінг контактів не працює.

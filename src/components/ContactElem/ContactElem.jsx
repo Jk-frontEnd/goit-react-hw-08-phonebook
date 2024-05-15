@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteContact } from '../../redux/contactSlice';
 import css from './ContactElem.module.css'
@@ -7,9 +7,9 @@ import { ReactComponent as Icon } from '../../img/bin.svg';
 const ContactElem = ({ contact }) => {
   const dispatch = useDispatch();
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     dispatch(deleteContact(contact.id));
-  };
+  }, [contact.id, dispatch]);
 
   return (
     <li className={css.item} key={contact.id}>
