@@ -7,7 +7,6 @@ import { useEffect } from 'react';
 const PrivateRoute = () => {
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   useEffect(() => {
     if (token) {
@@ -15,7 +14,7 @@ const PrivateRoute = () => {
     }
   }, [token, dispatch]);
 
-  return token && isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />;
+  return token? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;
