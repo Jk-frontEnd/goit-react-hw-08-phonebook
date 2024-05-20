@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { selectAuthToken } from './authSlice';
 import axios from 'axios';
 
 const baseUrl = 'https://connections-api.herokuapp.com/contacts';
@@ -24,28 +23,41 @@ export const fetchContacts = createAsyncThunk(
 
 export const addContact = createAsyncThunk(
   'contacts/addContact',
-  async ({ name, number }) => {
-    const token = selectAuthToken();
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      const response = await axios.post(`${baseUrl}/contacts`, { name, number });
+  async ({ name, number }, thunkAPI) => {
+    const token = tokenSelector(thunkAPI.getState());
+    try {
+      const response = await axios.post(baseUrl, { name, number }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
+    } catch (error) {
+      throw error;
     }
   }
 );
 
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
-  async (contactId) => {
-    const token = selectAuthToken();
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      await axios.delete(`${baseUrl}/contacts/${contactId}`);
+  async ({ contactId }, thunkAPI) => {
+    if (!contactId) {
+      throw new Error('Contact ID is required');
+    }
+    try {
+      const token = tokenSelector(thunkAPI.getState());
+      await axios.delete(`${baseUrl}/${contactId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(contactId);
       return contactId;
+    } catch (error) {
+      throw error;
     }
   }
 );
-
 
 export const updateContact = createAsyncThunk(
   'contacts/updateContact',
@@ -64,34 +76,72 @@ export const updateContact = createAsyncThunk(
   }
 );
 
-
-const contactsSlice = createSlice({
+export const contactsSlice = createSlice({
   name: 'contacts',
   initialState: {
     items: [],
     isLoading: false,
-    error: null
+    error: null,
+    loading: {
+      fetchContacts: false,
+      addContact: false,
+      deleteContact: false,
+      updateContact: false,
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchContacts.pending, (state) => {
+     .addCase(fetchContacts.pending, (state) => {
         state.isLoading = true;
+        state.loading.fetchContacts = true;
         state.error = null;
       })
-      .addCase(fetchContacts.fulfilled, (state, action) => {
+     .addCase(fetchContacts.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.loading.fetchContacts = false;
         state.items = action.payload;
       })
-      .addCase(fetchContacts.rejected, (state, action) => {
+     .addCase(fetchContacts.rejected, (state, action) => {
         state.isLoading = false;
+        state.loading.fetchContacts = false;
         state.error = action.error.message;
       })
-      .addCase(addContact.fulfilled, (state, action) => {
+     .addCase(addContact.pending, (state) => {
+        state.loading.addContact = true;
+      })
+     .addCase(addContact.fulfilled, (state, action) => {
+        state.loading.addContact = false;
         state.items.push(action.payload);
       })
-      .addCase(deleteContact.fulfilled, (state, action) => {
-        state.items = state.items.filter(contact => contact.id !== action.payload);
+     .addCase(addContact.rejected, (state, action) => {
+        state.loading.addContact = false;
+        state.error = action.error.message;
+      })
+     .addCase(deleteContact.pending, (state) => {
+        state.loading.deleteContact = true;
+      })
+     .addCase(deleteContact.fulfilled, (state, action) => {
+        state.loading.deleteContact = false;
+        state.items = state.items.filter((contact) => contact.id!== action.payload);
+      })
+     .addCase(deleteContact.rejected, (state, action) => {
+        state.loading.deleteContact = false;
+        state.error = action.error.message;
+      })
+     .addCase(updateContact.pending, (state) => {
+        state.loading.updateContact = true;
+      })
+     .addCase(updateContact.fulfilled, (state, action) => {
+        state.loading.updateContact = false;
+        const index = state.items.findIndex((contact) => contact.id === action.payload.id);
+        if (index!== -1) {
+          state.items[index] = action.payload;
+        }
+      })
+     .addCase(updateContact.rejected, (state, action) => {
+        state.loading.updateContact = false;
+        state.error = action.error.message;
       });
   },
 });
