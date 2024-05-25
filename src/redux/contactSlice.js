@@ -40,7 +40,7 @@ export const addContact = createAsyncThunk(
 
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
-  async ({ contactId }, thunkAPI) => {
+  async(contactId, thunkAPI) => {
     if (!contactId) {
       throw new Error('Contact ID is required');
     }
