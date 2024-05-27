@@ -15,7 +15,6 @@ const LoginPage = () => {
     event.preventDefault();
     try {
       await dispatch(loginUser({ email, password }));
-      // Save the user's login state to local storage
       localStorage.setItem('isLoggedIn', true);
     } catch (error) {
       setError(error.message);

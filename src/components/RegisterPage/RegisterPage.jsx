@@ -24,7 +24,7 @@ const RegisterPage = () => {
           <input className={css.input} placeholder='Password' type="current-password" value={password} onChange={(event) => setPassword(event.target.value)} />
         <button className={css.btn}   type="submit">Register</button>
       </form>
-      <p className={css.opportunity}>Don't have an account?  <Link className={css.link} to="/register">Register</Link></p>
+      <p className={css.opportunity}>Already have an account?  <Link className={css.link} to="/login">Login</Link></p>
     </div>
   );
 };

@@ -11,22 +11,17 @@ import PrivateRoute from './PrivateRoute/PrivateRoute';
 export const App = () => {
   return (
     <>
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegisterPage />} />
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route element={<PrivateRoute/>}>
           <Route path="/login" element={<LoginPage />} />
-          <Route element={<PrivateRoute/>}>
-            <Route path="/contacts" element={<ContactsPage />} />
-          </Route>
-        </Routes>
-      </>
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
+        <Route element={<PrivateRoute/>}>
+          <Route path="/contacts" element={<ContactsPage />} />
+        </Route>
+      </Routes>
+    </>
   );
 };
-
-
-// ! TODO:
-// * Раут з контактами має бути захищеним - тільки авторизований користувач повинен мати до нього доступ.
-// * Фетчінг контактів не працює.
-// TODO: При перезавантаженні сторінки авторизований користувач має залишатись авторизованим.
-// TODO: Видалення контактів не працює.
