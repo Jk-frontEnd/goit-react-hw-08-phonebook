@@ -21,9 +21,7 @@ const UserMenu = () => {
       {user && user.email && (
         <div className={css.userDiv}>
           <p className={css.email}>{user.email}</p>
-          <button className={css.btn} onClick={handleLogout}>
-            <Icon className={css.icon} />
-          </button>
+          <button className={css.btn} onClick={handleLogout}>   <Icon className={css.icon} /></button>
         </div>
       )}
     </div>
