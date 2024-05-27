@@ -8,7 +8,8 @@ const setTokenInLocalStorage = (token) => {
   localStorage.setItem('token', token);
 };
 
-const removeTokenFromLocalStorage = () => {
+const removeTokenFromLocalStorage = (token) => {
+  token = null;
   localStorage.removeItem('token');
 };
 
