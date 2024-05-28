@@ -7,15 +7,20 @@ import RegisterPage from '../components/RegisterPage/RegisterPage';
 import LoginPage from '../components/LoginPage/LoginPage';
 import ContactsPage from '../components/ContactPage/ContactPage';
 import PrivateRoute from './PrivateRoute/PrivateRoute';
+import RestrictedRoute from './RestrictedRoute/RestrictedRoute';
 
 export const App = () => {
   return (
     <>
         <Navigation />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<RestrictedRoute>
+          <LoginPage />
+        </RestrictedRoute>} />
+        <Route path="/register" element={<RestrictedRoute>
+          <RegisterPage />
+        </RestrictedRoute>} />
           <Route element={<PrivateRoute/>}>
             <Route path="/contacts" element={<ContactsPage />} />
           </Route>
