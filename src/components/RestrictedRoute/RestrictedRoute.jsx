@@ -3,9 +3,9 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const RestrictedRoute = () => {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const {token} = useSelector((state) => state.auth);
 
-  if (isLoggedIn) {
+  if (token) {
     return <Navigate to="/contacts" replace />; 
   }
 
