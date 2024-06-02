@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getCurrentUser } from '../../redux/authSlice';
 import { useEffect } from 'react';
 
-const PrivateRoute = ({compoment: Component, redirectTo = '/'}) => {
+const PrivateRoute = ({compoment: Component, redirectTo = '/login'}) => {
   const { isLoggedIn } = useSelector((state) => state.auth);
   const {isLoading} = useSelector((state) => state.contacts)
   const dispatch = useDispatch();

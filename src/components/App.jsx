@@ -6,7 +6,6 @@ import Navigation from '../components/Navigation/Navigation';
 import PrivateRoute from './PrivateRoute/PrivateRoute';
 import RestrictedRoute from './RestrictedRoute/RestrictedRoute';
 
-
 const HomePage = lazy(() => import('../components/Home/Home'));
 const RegisterPage = lazy(() => import('../components/RegisterPage/RegisterPage'));
 const LoginPage = lazy(() => import('../components/LoginPage/LoginPage'));
