@@ -1,13 +1,16 @@
 import React from 'react';
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Navigation from '../components/Navigation/Navigation';
-import HomePage from '../components/Home/Home';
-import RegisterPage from '../components/RegisterPage/RegisterPage';
-import LoginPage from '../components/LoginPage/LoginPage';
-import ContactsPage from '../components/ContactPage/ContactPage';
 import PrivateRoute from './PrivateRoute/PrivateRoute';
 import RestrictedRoute from './RestrictedRoute/RestrictedRoute';
+
+
+const HomePage = lazy(() => import('../components/Home/Home'));
+const RegisterPage = lazy(() => import('../components/RegisterPage/RegisterPage'));
+const LoginPage = lazy(() => import('../components/LoginPage/LoginPage'));
+const ContactsPage = lazy(() => import('../components/ContactPage/ContactPage'));
 
 export const App = () => {
   return (
@@ -28,10 +31,3 @@ export const App = () => {
       </>
   );
 };
-
-
-// ! TODO:
-// * Раут з контактами має бути захищеним - тільки авторизований користувач повинен мати до нього доступ.
-// * Фетчінг контактів не працює.
-// TODO: При перезавантаженні сторінки авторизований користувач має залишатись авторизованим.
-// TODO: Видалення контактів не працює.
