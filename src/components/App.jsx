@@ -47,8 +47,3 @@ export const App = () => {
   );
 };
 
-
-// ! todo 
-// * Layout.jsx for Navigation and checking if user logged in by token, render userAuthMenu !AuthMenu
-// * private if token => children if !token => Navigation="/login"
-// * dispatch getCurrentUser in App.jsx
